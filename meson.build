@@ -3,7 +3,7 @@ project(
     ['c', 'cpp'],
     version: '0.1',
     default_options: [
-        'c_std=gnu99',
+        'c_std=gnu18',
         'optimization=0',
         'warning_level=3',
         'debug=true',
@@ -68,7 +68,6 @@ add_project_link_arguments(
 )
 
 # Variable tracking
-linker_file = []
 project_src = []
 project_inc = []
 
@@ -76,11 +75,11 @@ project_inc = []
 subdir('lib')
 subdir('src')
 
-# Add linker file
-add_project_link_arguments(
-    '-T@0@/@1@'.format(meson.current_source_dir(), linker_file[0]),
-    '-static',
-    language: ['c', 'cpp'],
+# Compile SDK
+frdmkl46z_sdk = declare_dependency(
+    compile_args: ['-w', '-std=gnu99'],
+    sources: lib_frdmkl46_src,
+    include_directories: project_inc,
 )
 
 # Execute elf file
@@ -89,12 +88,13 @@ elf = executable(
     project_src,
     name_suffix: 'elf',
     include_directories: [project_inc],
+    dependencies: [frdmkl46z_sdk],
 )
 
 # Find arm toolchain executable
 objcopy = find_program('arm-none-eabi-objcopy')
 
-# Custom target .elf to .bin
+# Custom target '.elf' to '.bin'
 custom_target(
     '@0@.bin'.format(meson.project_name()),
     output: '@0@.bin'.format(meson.project_name()),

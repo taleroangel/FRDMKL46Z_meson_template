@@ -6,18 +6,18 @@
 
 int main(void)
 {
-    char ch;
+	char ch;
 
-    /* Init board hardware. */
-    BOARD_InitPins();
-    BOARD_BootClockRUN();
-    BOARD_InitDebugConsole();
+	/* Init board hardware. */
+	BOARD_InitPins();
+	BOARD_BootClockRUN();
+	BOARD_InitDebugConsole();
 
-    PRINTF("Hello world!, from my Meson project\r\n");
+	PRINTF("Hello world!, from my Meson project\r\n");
 
-    while (1)
-    {
-        ch = GETCHAR();
-        PUTCHAR(ch);
-    }
+	while (1)
+	{
+		ch = GETCHAR();
+		PUTCHAR(ch);
+	}
 }

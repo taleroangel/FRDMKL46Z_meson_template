@@ -6,6 +6,8 @@ else
     linker_file = files('device/gcc/MKL46Z256xxx4_flash.ld')
 endif
 
+
+# Include files
 project_inc += [
     include_directories('CMSIS/Include'),
     include_directories('device/.'),
@@ -16,8 +18,17 @@ project_inc += [
     include_directories('device/utilities'),
 ]
 
-project_src += [
+# Add linker file
+add_project_link_arguments(
+    '-T@0@/@1@'.format(meson.project_source_root(), linker_file[0]),
+    '-static',
+    language: ['c', 'cpp'],
+)
+
+lib_frdmkl46_src = [
+    # Startup files
     files('device/gcc/startup_MKL46Z4.S'),
+    # Project SDK files
     files('device/system_MKL46Z4.c'),
     files('device/system_MKL46Z4.h'),
     files('device/drivers/fsl_clock.h'),
