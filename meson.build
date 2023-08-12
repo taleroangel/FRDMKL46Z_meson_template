@@ -111,7 +111,7 @@ endif
 
 # Create the .elf file
 elf = executable(
-    meson.project_name(),
+    'output',
     project_src,
     name_suffix: 'elf',
     include_directories: [project_inc],
@@ -123,9 +123,8 @@ objcopy = find_program('arm-none-eabi-objcopy')
 
 # Custom target '.elf' to '.bin'
 custom_target(
-    '@0@.bin'.format(meson.project_name()),
+    'binary',
     output: '@0@.bin'.format(meson.project_name()),
-    build_by_default: true,
     command: [
         objcopy,
         [
