@@ -15,7 +15,6 @@ libraries = ['-lm', '-lc', '-lgcc', '-lnosys']
 
 # Define macros
 defines = [
-    '-DDEBUG',
     '-DCPU_MKL46Z256VLL4',
     '-DFRDM_KL46Z',
     '-DFREEDOM',
