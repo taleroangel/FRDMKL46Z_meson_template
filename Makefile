@@ -4,6 +4,8 @@ OPENOCD	=	openocd
 # Files location
 ELF_FILE =	build/output.elf
 
+all: build
+
 # Meson project setup
 build/build.ninja:
 	$(MESON) setup --cross-file cross-compilation.toml build
@@ -34,3 +36,8 @@ set_release:
 .PHONY: upload
 upload: build
 	$(OPENOCD) -f board/frdm-kl46z.cfg -c "program $(ELF_FILE) verify reset exit"
+
+# Clean the 'build' folder
+.PHONY: clean
+clean:
+	rm -rf build

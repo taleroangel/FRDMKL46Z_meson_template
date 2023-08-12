@@ -24,6 +24,10 @@ defines = [
     '-DSCANF_ADVANCED_ENABLE',
 ]
 
+if get_option('buildtype').startswith('debug')
+    add_project_arguments('-DDEBUG', language: ['c', 'cpp'])
+endif
+
 # Variable tracking
 project_src = []
 project_inc = []

@@ -35,7 +35,7 @@ static void hello_task(void *pvParameters)
 {
 	for (;;)
 	{
-		PRINTF("Hello world from RTOS!\r\n");
+		PRINTF("Hello world from FreeRTOS!\r\n");
 		vTaskSuspend(NULL);
 	}
 }
