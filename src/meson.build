@@ -1,5 +1,6 @@
-# Source config
-subdir('config')
-
 # Add main file
-project_src += files('main.c')
+if use_freertos
+    project_src += files('freertos_hello_world.c')
+else
+    project_src += files('simple_hello_world.c')
+endif

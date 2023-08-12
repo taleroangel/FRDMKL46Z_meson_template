@@ -1,6 +1,5 @@
 # Linker file
-use_ram_linker = meson.get_external_property('ramlinker')
-if use_ram_linker
+if meson.get_external_property('ramlinker')
     linker_file = files('device/gcc/MKL46Z256xxx4_ram.ld')
 else
     linker_file = files('device/gcc/MKL46Z256xxx4_flash.ld')
@@ -25,10 +24,11 @@ add_project_link_arguments(
     language: ['c', 'cpp'],
 )
 
-lib_frdmkl46_src = [
-    # Startup files
-    files('device/gcc/startup_MKL46Z4.S'),
-    # Project SDK files
+# Startup file
+frdmkl46z_startup_src = files('device/gcc/startup_MKL46Z4.S')
+
+# Project SDK files
+frdmkl46z_sdk_src = [
     files('device/system_MKL46Z4.c'),
     files('device/system_MKL46Z4.h'),
     files('device/drivers/fsl_clock.h'),

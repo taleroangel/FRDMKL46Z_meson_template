@@ -25,6 +25,14 @@ defines = [
     '-DSCANF_ADVANCED_ENABLE',
 ]
 
+# Variable tracking
+project_src = []
+project_inc = []
+
+# Source subdirectories
+subdir('lib')
+subdir('src')
+
 # Build arguments
 add_project_arguments(
     defines,
@@ -67,31 +75,51 @@ add_project_link_arguments(
     language: ['c', 'cpp'],
 )
 
-# Variable tracking
-project_src = []
-project_inc = []
-
-# Source subdirectories
-subdir('lib')
-subdir('src')
-
-# Compile SDK
-frdmkl46z_sdk = declare_dependency(
-    compile_args: ['-w', '-std=gnu99'],
-    sources: lib_frdmkl46_src,
+# Declare startup file
+frdmkl46z_startup = declare_dependency(
+    sources: frdmkl46z_startup_src,
     include_directories: project_inc,
 )
 
-# Execute elf file
+# Declare SDK
+frdmkl46z_sdk = declare_dependency(
+    compile_args: ['-w', '-std=gnu99'],
+    sources: frdmkl46z_sdk_src,
+    include_directories: project_inc,
+)
+
+# Declare configuration
+frdmkl46z_config = declare_dependency(
+    compile_args: ['-w', '-std=gnu99'],
+    sources: frdmkl46z_config_src,
+    include_directories: project_inc,
+)
+
+# Declare freertos
+if use_freertos
+    freertos = declare_dependency(
+        compile_args: ['-w', '-std=gnu99'],
+        sources: freertos_src,
+        include_directories: project_inc,
+    )
+endif
+
+# Declare dependencies
+project_dep = [frdmkl46z_startup, frdmkl46z_config, frdmkl46z_sdk]
+if use_freertos
+    project_dep += freertos
+endif
+
+# Create the .elf file
 elf = executable(
     meson.project_name(),
     project_src,
     name_suffix: 'elf',
     include_directories: [project_inc],
-    dependencies: [frdmkl46z_sdk],
+    dependencies: project_dep,
 )
 
-# Find arm toolchain executable
+# Find arm toolchain objcopy executable
 objcopy = find_program('arm-none-eabi-objcopy')
 
 # Custom target '.elf' to '.bin'
