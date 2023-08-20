@@ -4,6 +4,7 @@ project(
     version: '0.1',
     default_options: [
         'c_std=gnu18',
+        'cpp_std=c++17',
         'optimization=0',
         'warning_level=3',
         'debug=true',
@@ -85,32 +86,38 @@ frdmkl46z_startup = declare_dependency(
 )
 
 # Declare SDK
-frdmkl46z_sdk = declare_dependency(
-    compile_args: ['-w', '-std=gnu99'],
-    sources: frdmkl46z_sdk_src,
+frdmkl46z_sdk = static_library(
+    'frdmkl46z_sdk',
+    frdmkl46z_sdk_src,
+    c_args: ['-w', '-std=gnu99'],
     include_directories: project_inc,
+    pic: false,
 )
 
 # Declare configuration
-frdmkl46z_config = declare_dependency(
-    compile_args: ['-w', '-std=gnu99'],
-    sources: frdmkl46z_config_src,
+frdmkl46z_config = static_library(
+    'frdmkl46z_config',
+    frdmkl46z_config_src,
+    c_args: ['-w', '-std=gnu99'],
     include_directories: project_inc,
+    pic: false,
 )
 
 # Declare freertos
 if use_freertos
-    freertos = declare_dependency(
-        compile_args: ['-w', '-std=gnu99'],
-        sources: freertos_src,
+    freertos = static_library(
+        'freertos',
+        freertos_src,
+        c_args: ['-w', '-std=gnu99'],
         include_directories: project_inc,
+        pic: false,
     )
 endif
 
 # Declare dependencies
-project_dep = [frdmkl46z_startup, frdmkl46z_config, frdmkl46z_sdk]
+project_libs = [frdmkl46z_config, frdmkl46z_sdk]
 if use_freertos
-    project_dep += freertos
+    project_libs += freertos
 endif
 
 # Create the .elf file
@@ -119,7 +126,8 @@ elf = executable(
     project_src,
     name_suffix: 'elf',
     include_directories: [project_inc],
-    dependencies: project_dep,
+    dependencies: [frdmkl46z_startup],
+    link_with: project_libs,
 )
 
 # Find arm toolchain objcopy executable
