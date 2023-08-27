@@ -1,5 +1,4 @@
 [properties]
-freertos = true
 ramlinker = false
 
 [binaries]

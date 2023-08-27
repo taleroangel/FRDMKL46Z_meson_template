@@ -91,6 +91,7 @@ frdmkl46z_sdk = static_library(
     frdmkl46z_sdk_src,
     c_args: ['-w', '-std=gnu99'],
     include_directories: project_inc,
+    link_language: 'c',
     pic: false,
 )
 
@@ -100,34 +101,28 @@ frdmkl46z_config = static_library(
     frdmkl46z_config_src,
     c_args: ['-w', '-std=gnu99'],
     include_directories: project_inc,
+    link_language: 'c',
     pic: false,
 )
 
-# Declare freertos
-if use_freertos
-    freertos = static_library(
-        'freertos',
-        freertos_src,
-        c_args: ['-w', '-std=gnu99'],
-        include_directories: project_inc,
-        pic: false,
-    )
-endif
-
-# Declare dependencies
-project_libs = [frdmkl46z_config, frdmkl46z_sdk]
-if use_freertos
-    project_libs += freertos
-endif
+freertos = static_library(
+    'freertos',
+    freertos_src,
+    c_args: ['-w', '-std=gnu99'],
+    include_directories: project_inc,
+    link_language: 'c',
+    pic: false,
+)
 
 # Create the .elf file
 elf = executable(
     'output',
-    project_src,
+    [project_src],
+    cpp_args: ['-Wno-register'],
     name_suffix: 'elf',
     include_directories: [project_inc],
     dependencies: [frdmkl46z_startup],
-    link_with: project_libs,
+    link_with: [frdmkl46z_sdk, frdmkl46z_config, freertos],
 )
 
 # Find arm toolchain objcopy executable

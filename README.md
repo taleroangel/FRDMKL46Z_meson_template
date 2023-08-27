@@ -1,4 +1,4 @@
-# ⚙️ FRDM-KL46Z (Meson and CMSIS-DAP toolchain)
+# ⚙️ FRDM-KL46Z FreeRTOS Template (Meson and CMSIS-DAP toolchain)
 Development environment and tools for working with the FRDM-KL46Z microcontroller board using the Meson build system and the CMSIS-DAP interface firmware
 
 ## 📀 Makefile
@@ -6,7 +6,7 @@ Provided _Makefile_ easies compilation by reducing the ammount of commands requi
 
 * __setup__ Setup meson project
 * __build__ Compile _.elf_ file
-* __build_binary__ Compile _.bin_ file for manual upload
+* __binary__ Compile _.bin_ file for manual upload
 * __set_debug__ Set DEBUG flags (default)
 * __set_release__ Set RELEASE flags
 * __upload__ Compile and upload the code using _OpenOCD_ (Requires [OpenOCD and CMSIS-DAP](#resources))
